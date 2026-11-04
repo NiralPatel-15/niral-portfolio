@@ -3,7 +3,6 @@ import Hero from '@/components/Hero'
 import ScrollReveal from '@/components/ScrollReveal'
 import About from '@/components/About'
 import Education from '@/components/Education'
-import Experience from '@/components/Experience'
 import Skills from '@/components/Skills'
 import Projects from '@/components/Projects'
 import Contact from '@/components/Contact'
@@ -17,7 +16,6 @@ export default function Home() {
         <Hero />
         <ScrollReveal delay={0}><About /></ScrollReveal>
         <ScrollReveal delay={100}><Education /></ScrollReveal>
-        <ScrollReveal delay={150}><Experience /></ScrollReveal>
         <ScrollReveal delay={100}><Skills /></ScrollReveal>
         <ScrollReveal delay={150}><Projects /></ScrollReveal>
         <ScrollReveal delay={100}><Contact /></ScrollReveal>

@@ -43,15 +43,17 @@ async function fetchList(table, fallback) {
 }
 
 async function fetchContact() {
-  const raw = await api.public.fetch('contact')
-  const c = raw?.[0] || fallbackContact
+  const raw = await api.public.fetch("contact");
+  const c = raw?.[0] || fallbackContact;
+
   return {
-    whatsapp: c.whatsapp || '',
-    email: c.email || '',
-    github: c.github || c.social?.github || '',
-    linkedin: c.linkedin || c.social?.linkedin || '',
-    facebook: c.facebook || c.social?.facebook || '',
-  }
+    whatsapp: c.whatsapp || "",
+    email: c.email || "",
+    github: c.github || c.social?.github || "",
+    linkedin: c.linkedin || c.social?.linkedin || "",
+    facebook: c.facebook || c.social?.facebook || "",
+    instagram: c.instagram || c.social?.instagram || "",
+  };
 }
 
 function useContent() {
@@ -59,10 +61,17 @@ function useContent() {
   return ctx || {}
 }
 
-export function useHero() { return useContent().hero || fallbackHero }
+export function useHero() {
+  const ctx = useContext(ContentContext);
+  return ctx?.hero || fallbackHero;
+}
+
 export function useAbout() { return useContent().about || fallbackAbout }
 export function useEducation() { return useContent().education || fallbackEducation }
 export function useExperience() { return useContent().experience || fallbackExperience }
 export function useSkills() { return useContent().skill_categories || fallbackSkills }
-export function useProjects() { return useContent().projects || fallbackProjects }
+export function useProjects() {
+  const ctx = useContext(ContentContext)
+  return ctx ? ctx.projects : null
+}
 export function useContact() { return useContent().contact || fallbackContact }

@@ -1,127 +1,157 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { api } from '@/lib/api'
+import { useState } from "react";
+import Link from "next/link";
+import { Eye, EyeOff } from "lucide-react";
+import { api } from "@/lib/api";
+import styles from "./login.module.css";
 
 export default function AdminLogin() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [error, setError] = useState('')
-  const [loading, setLoading] = useState(false)
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   async function handleSubmit(e) {
-    e.preventDefault()
-    setError('')
-    setLoading(true)
-    try {
-      const data = await api.auth.login(email, password)
-      localStorage.setItem('supabase_token', data.access_token)
-      localStorage.setItem('supabase_refresh', data.refresh_token)
+    e.preventDefault();
+    setError("");
+    setLoading(true);
 
-      window.location.href = '/admin'
+    try {
+      const data = await api.auth.login(email.trim(), password);
+
+      if (!data?.access_token) {
+        throw new Error("Login failed. Please check your credentials.");
+      }
+
+      localStorage.setItem("supabase_token", data.access_token);
+
+      if (data.refresh_token) {
+        localStorage.setItem("supabase_refresh", data.refresh_token);
+      }
+
+      window.location.href = "/admin";
     } catch (err) {
-      setError(err.message)
+      setError(err.message || "Unable to sign in. Please try again.");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   }
 
   return (
-    <div style={{
-      minHeight: '100vh',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      background: '#0a0a12',
-      padding: 24,
-    }}>
-      <form onSubmit={handleSubmit} style={{
-        background: '#13131e',
-        border: '1px solid #222233',
-        borderRadius: 16,
-        padding: 40,
-        width: '100%',
-        maxWidth: 400,
-      }}>
-        <h1 style={{ color: '#f0f0f5', fontSize: 22, marginBottom: 8 }}>Admin Login</h1>
-        <p style={{ color: '#6b6e80', fontSize: 13, marginBottom: 32 }}>
-            Sign in to manage your portfolio
-        </p>
+    <main className={styles.page}>
+      <section className={styles.visualPanel}>
+        <div className={styles.brand}>
+          <span className={styles.brandMark}>N</span>
+          <span>Niral Patel</span>
+        </div>
 
-        <label style={{ display: 'block', color: '#818cf8', fontSize: 11, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 6 }}>
-        Email
-        </label>
-        <input
-          type="email"
-          required
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          style={{
-            display: 'block',
-            width: '100%',
-            padding: '12px 14px',
-            background: '#0a0a12',
-            border: '1px solid #222233',
-            borderRadius: 8,
-            color: '#f0f0f5',
-            fontSize: 14,
-            marginBottom: 20,
-            outline: 'none',
-          }}
-          onFocus={(e) => e.target.style.borderColor = '#818cf8'}
-          onBlur={(e) => e.target.style.borderColor = '#222233'}
-        />
+        <div className={styles.visualContent}>
+          <p className={styles.eyebrow}>Portfolio CMS</p>
 
-        <label style={{ display: 'block', color: '#818cf8', fontSize: 11, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 6 }}>
+          <h1 className={styles.visualTitle}>
+            Your work.
+            <br />
+            Your story.
+            <br />
+            <span>Your space.</span>
+          </h1>
 
-          Password
-        </label>
-        <input
-          type="password"
-          required
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          style={{
-            display: 'block',
-            width: '100%',
-            padding: '12px 14px',
-            background: '#0a0a12',
-            border: '1px solid #222233',
-            borderRadius: 8,
-            color: '#f0f0f5',
-            fontSize: 14,
-            marginBottom: 24,
-            outline: 'none',
-          }}
-          onFocus={(e) => e.target.style.borderColor = '#818cf8'}
-          onBlur={(e) => e.target.style.borderColor = '#222233'}
-        />
+          <p className={styles.visualDescription}>
+            A dedicated workspace to manage your portfolio, showcase your
+            projects and keep your professional presence up to date.
+          </p>
+        </div>
 
-        {error && (
-          <p style={{ color: '#f87171', fontSize: 13, marginBottom: 16 }}>{error}</p>
-        )}
+        <div className={styles.visualFooter}>
+          © {new Date().getFullYear()} Niral Patel. All rights reserved.
+        </div>
+      </section>
 
-        <button
-          type="submit"
-          disabled={loading}
-          style={{
-            width: '100%',
-            padding: '14px 24px',
-            background: 'linear-gradient(135deg, #818cf8, #6366f1, #a78bfa)',
-            border: 'none',
-            borderRadius: 8,
-            color: '#fff',
-            fontSize: 13,
-            fontWeight: 600,
-            textTransform: 'uppercase',
-            letterSpacing: '0.06em',
-            cursor: loading ? 'not-allowed' : 'pointer',
-            opacity: loading ? 0.6 : 1,
-          }}
-        >
-          {loading ? 'Signing in...' : 'Sign In'}
-        </button>
-      </form>
-    </div>
-  )
+      <section className={styles.formPanel}>
+        <div className={styles.formContainer}>
+          <div className={styles.mobileBrand}>
+            <span className={styles.brandMark}>N</span>
+            <span>Niral Patel</span>
+          </div>
+
+          <p className={styles.formEyebrow}>Administrator access</p>
+
+          <h2 className={styles.heading}>Welcome back.</h2>
+
+          <p className={styles.description}>
+            Sign in to access your portfolio workspace.
+          </p>
+
+          <form onSubmit={handleSubmit}>
+            <div className={styles.field}>
+              <label className={styles.label} htmlFor="admin-email">
+                Email address
+              </label>
+
+              <input
+                id="admin-email"
+                className={styles.input}
+                type="email"
+                placeholder="you@example.com"
+                autoComplete="username"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                disabled={loading}
+              />
+            </div>
+
+            <div className={styles.field}>
+              <label className={styles.label} htmlFor="admin-password">
+                Password
+              </label>
+
+              <div className={styles.inputWrap}>
+                <input
+                  id="admin-password"
+                  className={`${styles.input} ${styles.passwordInput}`}
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Enter your password"
+                  autoComplete="current-password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  disabled={loading}
+                />
+
+                <button
+                  type="button"
+                  className={styles.passwordToggle}
+                  onClick={() => setShowPassword((current) => !current)}
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                >
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
+            </div>
+
+            {error && (
+              <div className={styles.error} role="alert">
+                {error}
+              </div>
+            )}
+
+            <button
+              type="submit"
+              className={styles.submitButton}
+              disabled={loading || !email.trim() || !password}
+            >
+              {loading ? "Signing you in..." : "Sign in to workspace"}
+            </button>
+          </form>
+
+          <Link href="/" className={styles.backLink}>
+            ← Back to portfolio
+          </Link>
+        </div>
+      </section>
+    </main>
+  );
 }
