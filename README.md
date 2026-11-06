@@ -244,7 +244,7 @@ The contact form uses **EmailJS** to send messages directly to your email. All E
 Open an issue or PR on GitHub.
 # 👨‍💻 Author
 
-**Mohamed AlSayed**
+**Niral Patel**
 ---
 Made with ❤️ by me
-[GitHub](https://github.com/MohamedAlsayed334)
+[GitHub](https://github.com/NiralPatel-15)
